@@ -19,40 +19,71 @@ function divide(a, b){
     }
 }
 
-function operate (op, a , b) {
-    switch(op){
-      case ad:
-        return add(a, b);
-        break;
-      case sub: 
-        return subtract(a, b);
-        break;
-      case mult:
-        return multiply(a, b);
-        break;
-      case div:
-        return divide(a, b);
-        break;
-    }
+function restart(){
+  a = 0; 
+  b = 0;
+  displayValue = 0;
+}
+
+function operate(){
+  b = parseInt(displayValue);
+  switch(op){
+    case ad:
+      answer = add(a, b);
+      break;
+    case sub: 
+      answer = subtract(a, b);
+      break;
+    case mult:
+      answer = multiply(a, b);
+      break;
+    case div:
+      answer = divide(a, b);
+      break;
   }
 
-  function updateDisplay(){ //doesnt work
-    if(displayValue == "0"){
-        displayValue == this.id;
-    }
-    else{
-        displayValue += this.id;
-    }
+  alert(answer);
+  restart();
+}
+
+function updateDisplay(e){
+  if(displayValue == 0){
+    displayValue = e.target.id;
   }
-  
-  let ad = "+";
-  let sub = "-";
-  let mult = "*";
-  let div = "/";
+  else if(e.target.id == 'clear'){
+    displayValue = 0;
+    alert('Cleared');
+  }
+  else{
+    displayValue += e.target.id;
+  }
+}
 
-  let displayValue = "0"; //initial display is zero
+function setOp(e){
+  a = parseInt(displayValue);
+  displayValue = 0;
+  op = e.target.id;
+}
 
-  let number = document.getElementsByClassName("number");
-  for (var i = 0 ; i < number.length; i++) {
-    number[i].addEventListener('click' , updateDisplay(), false ) ; //doesnt work
- }
+let a = 0; 
+let b = 0;
+let displayValue = 0;
+
+let op = "";
+let ad = "+";
+let sub = "-";
+let mult = "*";
+let div = "/";
+
+let number = document.getElementsByClassName("number");
+let operand = document.getElementsByClassName("operand");
+let clear = document.getElementById('clear');
+let equals = document.getElementById('=');
+for (var i = 0 ; i < number.length; i++) {
+  number[i].addEventListener('click' , updateDisplay, false);
+}
+for (var i = 0 ; i < operand.length; i++) {
+  operand[i].addEventListener('click', setOp, false);
+}
+clear.addEventListener('click', updateDisplay, false);
+equals.addEventListener('click', operate, false);
