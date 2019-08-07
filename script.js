@@ -23,27 +23,50 @@ function restart(){
   a = 0; 
   b = 0;
   displayValue = 0;
+  numDiv.removeChild(firstNum);
+  numDiv.removeChild(sign);
+  numDiv.removeChild(secondNum);
 }
 
+function roundNumber(num, scale){ //rounding algorithm stolen from stackoverflow :)
+  if(!("" + num).includes("e")) {
+    return +(Math.round(num + "e+" + scale)  + "e-" + scale);
+  } else {
+    var arr = ("" + num).split("e");
+    var sig = ""
+    if(+arr[1] + scale > 0) {
+      sig = "+";
+    }
+    return +(Math.round(+arr[0] + "e" + sig + (+arr[1] + scale)) + "e-" + scale);
+  }
+}
+
+//set second number, start calculation
 function operate(){
-  b = parseInt(displayValue);
+  b = parseFloat(displayValue);
+  secondNum.textContent = b;
+  numDiv.appendChild(secondNum);
+
+
   switch(op){
     case ad:
-      answer = add(a, b);
+      displayValue = parseFloat(add(a, b)).toFixed(2);
       break;
     case sub: 
-      answer = subtract(a, b);
+      displayValue = parseFloat(subtract(a, b)).toFixed(2);
       break;
     case mult:
-      answer = multiply(a, b);
+      displayValue = parseFloat(multiply(a, b)).toFixed(2);
       break;
     case div:
-      answer = divide(a, b);
+      displayValue = parseFloat(divide(a, b)).toFixed(2);
       break;
   }
 
-  alert(answer);
-  restart();
+  displayValue = roundNumber(displayValue, 2);
+
+  mainDisplay.textContent = displayValue;
+  displayDiv.appendChild(mainDisplay);
 }
 
 function updateDisplay(e){
@@ -51,30 +74,41 @@ function updateDisplay(e){
     displayValue = e.target.id;
   }
   else if(e.target.id == 'clear'){
-    displayValue = 0;
+    restart();
     alert('Cleared');
   }
   else{
     displayValue += e.target.id;
   }
+  mainDisplay.textContent = displayValue;
+  displayDiv.appendChild(mainDisplay);
 }
 
+//find operator value, set first number
 function setOp(e){
-  a = parseInt(displayValue);
+  a = parseFloat(displayValue);
+  firstNum.textContent = a;
+  numDiv.appendChild(firstNum);
   displayValue = 0;
   op = e.target.id;
+  sign.textContent = op;
+  numDiv.appendChild(sign);
 }
 
+//initial values
 let a = 0; 
 let b = 0;
 let displayValue = 0;
 
+//operators
 let op = "";
 let ad = "+";
 let sub = "-";
 let mult = "*";
 let div = "/";
 
+
+//Event listeners
 let number = document.getElementsByClassName("number");
 let operand = document.getElementsByClassName("operand");
 let clear = document.getElementById('clear');
@@ -87,3 +121,17 @@ for (var i = 0 ; i < operand.length; i++) {
 }
 clear.addEventListener('click', updateDisplay, false);
 equals.addEventListener('click', operate, false);
+
+
+//DOM
+let displayDiv = document.getElementById('displayVal');
+let numDiv = document.getElementById('num');
+let firstNum = document.createElement('h2');
+firstNum.id = 'firstNum';
+let sign = document.createElement('h2');
+sign.id = 'sign';
+let secondNum = document.createElement('h2');
+secondNum.id = 'secondNum';
+let mainDisplay = document.createElement('h1');
+mainDisplay.textContent = displayValue;
+displayDiv.appendChild(mainDisplay);
