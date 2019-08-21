@@ -66,7 +66,7 @@ function operate(){
   displayValue = roundNumber(displayValue, 2);
 
   mainDisplay.textContent = displayValue;
-  displayDiv.appendChild(mainDisplay);
+  //displayDiv.appendChild(mainDisplay);
 }
 
 function updateDisplay(e){
@@ -75,13 +75,11 @@ function updateDisplay(e){
   }
   else if(e.target.id == 'clear'){
     restart();
-    alert('Cleared');
   }
   else{
     displayValue += e.target.id;
   }
   mainDisplay.textContent = displayValue;
-  displayDiv.appendChild(mainDisplay);
 }
 
 //find operator value, set first number
@@ -93,6 +91,10 @@ function setOp(e){
   op = e.target.id;
   sign.textContent = op;
   numDiv.appendChild(sign);
+
+  if(b>0){
+    secondNum.textContent = "";
+  }
 }
 
 //initial values
@@ -112,7 +114,7 @@ let div = "/";
 let number = document.getElementsByClassName("number");
 let operand = document.getElementsByClassName("operand");
 let clear = document.getElementById('clear');
-let equals = document.getElementById('=');
+let equals = document.getElementById('equal');
 for (var i = 0 ; i < number.length; i++) {
   number[i].addEventListener('click' , updateDisplay, false);
 }
@@ -126,12 +128,12 @@ equals.addEventListener('click', operate, false);
 //DOM
 let displayDiv = document.getElementById('displayVal');
 let numDiv = document.getElementById('num');
-let firstNum = document.createElement('h2');
+let firstNum = document.createElement('span');
 firstNum.id = 'firstNum';
-let sign = document.createElement('h2');
+let sign = document.createElement('span');
 sign.id = 'sign';
-let secondNum = document.createElement('h2');
+let secondNum = document.createElement('span');
 secondNum.id = 'secondNum';
-let mainDisplay = document.createElement('h1');
+let mainDisplay = document.createElement('span');
 mainDisplay.textContent = displayValue;
 displayDiv.appendChild(mainDisplay);
